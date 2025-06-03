@@ -9,25 +9,20 @@ import AutoSlider from './components/AutoSlider';
 function App() {
   return (
     <div>
-      <div className="flex m-5">
+      <div className="flex m-2">
         <div className="flex-1">
           <Countdown date="2025-06-17 11:00" />
-        </div>
-        <div className='w-[350px]'>
-          <Weather />
-        </div>
-      </div>
-
-      <div className="flex m-5">
-        <div className="flex-1">
           <AutoSlider />
+          <Footer />
         </div>
-        <div className='w-[350px]'>
+        <div className='w-[350px] space-y-2'>
+          <img class="h-auto max-w-full" src="/image copy.png" alt="image description" />
+          <Weather />
           <CurrencyRates />
         </div>
       </div>
 
-      <Footer />
+      
 
     </div>
   );
