@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import './Weather.css'; // Yeni CSS dosyası
 
 const iconMap = {
   "01d": "https://img.icons8.com/ios/100/000000/sun--v1.png",
@@ -46,13 +47,12 @@ function Weather() {
           grouped[date].push(item);
         });
 
-        const dailyForecasts = Object.entries(grouped)
-          .map(([date, forecasts]) => ({
-            date,
-            temp: forecasts[0].main.temp,
-            description: forecasts[0].weather[0].description,
-            icon: forecasts[0].weather[0].icon,
-          }));
+        const dailyForecasts = Object.entries(grouped).map(([date, forecasts]) => ({
+          date,
+          temp: forecasts[0].main.temp,
+          description: forecasts[0].weather[0].description,
+          icon: forecasts[0].weather[0].icon,
+        }));
 
         setWeather(dailyForecasts);
         setLoading(false);
@@ -62,35 +62,35 @@ function Weather() {
       }
     }
 
-    getForecast(); // ilk yüklemede çağır
-
-    intervalId = setInterval(getForecast, 300000); // her 5 dakikada bir çağır
-
-    return () => clearInterval(intervalId); // bileşen kaldırılırken interval temizle
+    getForecast();
+    intervalId = setInterval(getForecast, 300000);
+    return () => clearInterval(intervalId);
   }, [API_KEY, city]);
 
-  if (loading) return <p className="text-center mt-6">Yükleniyor...</p>;
-  if (!weather || weather.length === 0) return <p className="text-center mt-6">Veri alınamadı.</p>;
+  if (loading) return <p className="weather-loading">Yükleniyor...</p>;
+  if (!weather || weather.length === 0) return <p className="weather-loading">Veri alınamadı.</p>;
 
   const today = weather[0];
 
   return (
-    <div className="max-w-sm mx-auto p-6 bg-white rounded-2xl shadow-lg">
-      <h2 className="text-2xl font-semibold mb-4 text-center text-gray-800">{city} Bugünkü Hava Durumu</h2>
-      <div className="flex flex-col items-center text-center">
-        <p className="text-sm text-gray-600 mb-1 capitalize">{today.description}</p>
+    <div className="weather-container">
+      <h2 className="weather-title">{city} Bugünkü Hava Durumu</h2>
+      <div className="weather-content">
+        <p className="weather-description">{today.description}</p>
         <img
           src={iconMap[today.icon] || iconMap["01d"]}
           alt={today.description}
-          className="w-24 h-24 mb-4"
+          className="weather-icon"
         />
-        <p className="text-5xl font-bold text-[#f1821f] mb-2">{Math.round(today.temp)}°C</p>
-        <p className="text-gray-500 text-sm">{new Date(today.date).toLocaleDateString('tr-TR', {
-          weekday: 'long',
-          day: 'numeric',
-          month: 'long',
-          year: 'numeric',
-        })}</p>
+        <p className="weather-temp">{Math.round(today.temp)}°C</p>
+        <p className="weather-date">
+          {new Date(today.date).toLocaleDateString("tr-TR", {
+            weekday: "long",
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          })}
+        </p>
       </div>
     </div>
   );

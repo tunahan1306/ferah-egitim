@@ -1,0 +1,41 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  min-height: 100vh;
+  font-family: sans-serif;
+}
+
+.container {
+  width: 100%;
+  padding: 16px;
+}
+
+.main-content {
+  display: flex;
+  padding: 8px;
+}
+
+.left-panel {
+  flex: 1;
+}
+
+.right-panel {
+  width: 350px;
+  display: flex;
+  flex-direction: column;
+}
+
+.right-panel > *:not(:last-child) {
+  margin-bottom: 8px;
+}
+
+.main-image {
+  width: 100%;
+  height: auto;
+  display: block;
+}

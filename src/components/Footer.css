@@ -1,0 +1,13 @@
+.footer {
+    background-color: white;
+    padding: 40px 0;
+    margin: 16px;
+    text-align: center;
+  }
+  
+  .footer-text ,.footer-text a {
+    font-size: 14px;
+    color: #6b7280; /* Tailwind'deki text-gray-500 benzeri */
+    text-decoration: none;
+  }
+  

@@ -1,0 +1,78 @@
+.card {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  }
+  
+  .title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #2d3748;
+  }
+  
+  .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    color: #4a5568;
+  }
+  
+  .value {
+    display: flex;
+    align-items: center;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #2b6cb0;
+  }
+  
+  .value.gold {
+    color: #d69e2e;
+  }
+  
+  .change {
+    margin-left: 0.5rem;
+    font-size: 1.2rem;
+  }
+  
+  .change.up {
+    color: #38a169;
+  }
+  
+  .change.down {
+    color: #e53e3e;
+  }
+  
+  .change.same {
+    color: #a0aec0;
+  }
+  
+  .loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 10rem;
+  }
+  
+  .loading-text {
+    font-size: 1.125rem;
+    color: #718096;
+  }
+  
+  .error-text {
+    font-size: 1.125rem;
+    color: #e53e3e;
+  }
+  

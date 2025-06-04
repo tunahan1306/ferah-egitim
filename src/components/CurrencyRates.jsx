@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import './CurrencyRates.css'; // CSS dosyasını içe aktarıyoruz
 
 function CurrencyRates() {
   const [rates, setRates] = useState(null);
@@ -19,7 +20,8 @@ function CurrencyRates() {
         EURTRY: eurTry,
         EURUSD: 1 / usdEur,
       });
-    } catch {
+    } catch (err) {
+      console.error('Döviz bilgisi alınamadı:', err);
       setRates(null);
     }
   };
@@ -32,19 +34,14 @@ function CurrencyRates() {
       const usdTry = rates ? rates.USDTRY : 1;
       const goldPriceTRY = (goldPriceUSD * usdTry) / 31.1035;
       setGoldPrice(goldPriceTRY);
-    } catch {
+    } catch (err) {
+      console.error('Altın bilgisi alınamadı:', err);
       setGoldPrice(null);
     }
   };
 
-  // Verileri çekme fonksiyonu (döviz + altın)
-  const fetchAllData = async () => {
-    await fetchRates();
-  };
-
-  // İlk yüklemede ve rates değiştiğinde altın fiyatını da çek
   useEffect(() => {
-    fetchAllData();
+    fetchRates();
   }, []);
 
   useEffect(() => {
@@ -54,101 +51,102 @@ function CurrencyRates() {
     }
   }, [rates]);
 
-  // 2 dakikada bir otomatik yenileme
   useEffect(() => {
     const interval = setInterval(() => {
-      fetchAllData();
-    }, 120000); // 120.000 ms = 2 dakika
+      fetchRates();
+    }, 120000);
 
-    return () => clearInterval(interval); // temizleme
+    return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    if (rates) {
+      prevRates.current.USDTRY = rates.USDTRY;
+      prevRates.current.EURTRY = rates.EURTRY;
+      prevRates.current.EURUSD = rates.EURUSD;
+    }
+  }, [rates]);
+
+  useEffect(() => {
+    if (goldPrice) {
+      prevRates.current.XAUTRY = goldPrice;
+    }
+  }, [goldPrice]);
 
   function getChangeIcon(key, value) {
     if (prevRates.current[key] === null) return null;
     if (value > prevRates.current[key]) {
-      return <span className="text-green-500 ml-2">↑</span>;
+      return <span className="change up">↑</span>;
     } else if (value < prevRates.current[key]) {
-      return <span className="text-red-500 ml-2">↓</span>;
+      return <span className="change down">↓</span>;
     } else {
-      return <span className="text-gray-400 ml-2">→</span>;
+      return <span className="change same">→</span>;
     }
   }
 
-  useEffect(() => {
-    if (rates && goldPrice) {
-      prevRates.current = {
-        USDTRY: rates.USDTRY,
-        EURTRY: rates.EURTRY,
-        XAUTRY: goldPrice,
-        EURUSD: rates.EURUSD,
-      };
-    }
-  }, [rates, goldPrice]);
-
-  if (loading)
+  if (loading) {
     return (
-      <div className="flex justify-center items-center h-40">
-        <p className="text-gray-500 text-lg">Yükleniyor...</p>
+      <div className="loading-container">
+        <p className="loading-text">Yükleniyor...</p>
       </div>
     );
+  }
 
-  if (!rates || !goldPrice)
+  if (!rates || !goldPrice) {
     return (
-      <div className="flex justify-center items-center h-40">
-        <p className="text-red-500 text-lg">Kur bilgisi alınamadı.</p>
+      <div className="loading-container">
+        <p className="error-text">Kur bilgisi alınamadı.</p>
       </div>
     );
+  }
 
   return (
-    <div className="max-w-md mx-auto bg-white rounded-2xl shadow-lg p-6 space-y-6">
-      <h2 className="text-2xl font-semibold text-center text-gray-800 mb-4">
-        Döviz ve Altın Kurları
-      </h2>
+    <div className="card">
+      <h2 className="title">Döviz ve Altın Kurları</h2>
 
-      <div className="flex justify-between items-center border-b border-gray-200 pb-4">
-        <div className="flex items-center space-x-2">
-          <span className="text-xl">💵</span>
-          <span className="font-medium text-gray-700">Dolar - Türk Lirası</span>
+      <div className="row">
+        <div className="label">
+          <span>💵</span>
+          <span>Dolar - Türk Lirası</span>
         </div>
-        <span className="text-lg font-semibold text-blue-600 flex items-center">
+        <div className="value">
           {rates.USDTRY.toFixed(4)}
           {getChangeIcon('USDTRY', rates.USDTRY)}
-        </span>
+        </div>
       </div>
 
-      <div className="flex justify-between items-center border-b border-gray-200 pb-4">
-        <div className="flex items-center space-x-2">
-          <span className="text-xl">💶</span>
-          <span className="font-medium text-gray-700">Euro - Türk Lirası</span>
+      <div className="row">
+        <div className="label">
+          <span>💶</span>
+          <span>Euro - Türk Lirası</span>
         </div>
-        <span className="text-lg font-semibold text-blue-600 flex items-center">
+        <div className="value">
           {rates.EURTRY.toFixed(4)}
           {getChangeIcon('EURTRY', rates.EURTRY)}
-        </span>
+        </div>
       </div>
 
-      <div className="flex justify-between items-center border-b border-gray-200 pb-4">
-        <div className="flex items-center space-x-2">
-          <span className="text-xl">🥇</span>
-          <span className="font-medium text-gray-700">Gram Altın - Türk Lirası</span>
+      <div className="row">
+        <div className="label">
+          <span>🥇</span>
+          <span>Gram Altın - Türk Lirası</span>
         </div>
-        <span className="text-lg font-semibold text-yellow-600 flex items-center">
+        <div className="value gold">
           {goldPrice.toFixed(2)}
           {getChangeIcon('XAUTRY', goldPrice)}
-        </span>
+        </div>
       </div>
 
-      <div className="flex justify-between items-center">
-        <div className="flex items-center space-x-2">
-          <span className="text-xl">💱</span>
-          <span className="font-medium text-gray-700">Euro - Dolar</span>
+      <div className="row">
+        <div className="label">
+          <span>💱</span>
+          <span>Euro - Dolar</span>
         </div>
-        <span className="text-lg font-semibold text-blue-600 flex items-center">
+        <div className="value">
           {rates.EURUSD.toFixed(4)}
           {getChangeIcon('EURUSD', rates.EURUSD)}
-        </span>
+        </div>
       </div>
-
     </div>
   );
 }

@@ -1,12 +1,12 @@
-import React from 'react'
+import React from 'react';
+import './Footer.css'; // Yeni CSS dosyası (veya App.css'e de ekleyebilirsin)
 
 export default function Footer() {
     return (
-        <div>
-            <footer class="bg-white dark:bg-gray-900 m-4 py-10">
-            <span class="block text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2025 <a href="" class="">Tunahan Çakır</a>.</span>
-
-            </footer>
-        </div>
-    )
+        <footer className="footer">
+            <span className="footer-text">
+                © 2025 <a href="">Tunahan Çakır</a>
+            </span>
+        </footer>
+    );
 }
