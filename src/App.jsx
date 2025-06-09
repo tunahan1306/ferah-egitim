@@ -5,6 +5,7 @@ import Countdown from './components/Countdown';
 import CurrencyRates from './components/CurrencyRates';
 import Footer from './components/Footer';
 import AutoSlider from './components/AutoSlider';
+import Clock from './components/Clock';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         </div>
         <div className="right-panel">
           <img className="main-image" src="/image copy.png" alt="image description" />
+          <Clock />
           <Weather />
           <CurrencyRates />
         </div>
